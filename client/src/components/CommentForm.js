@@ -7,38 +7,37 @@ class CommentForm extends Component {
     constructor(props){
         super(props);
         this.state = {
-            newcomment: {},
+            text: "",
             clicked: false
         }
     }
     
     handleNewComment = e => {
+        e.preventDefault()
         if(this.state.clicked === false){
-          this.setState({clicked: true})
-          e.preventDefault()
-          if(this.state.newcomment.text && this.state.newcomment.text.length > 0){
-            let userId = this.props.currentUser.id 
-            this.props.newComment(this.state.newcomment, userId)
-                .then(()=>this.setState({newcomment:{text:""}, clicked: false}))
-                .catch(()=>this.setState({newcomment:{text:""}, clicked: false}))
-          }
+          this.setState({
+            clicked: true, 
+            imageId: this.props.match.params.imageId, 
+            author:{
+                  id: this.props.currentUser.id, 
+                  username: this.props.currentUser.username
+            }
+          }, 
+            () => {
+              if(this.state.text && this.state.text.length > 0){
+                let userId = this.props.currentUser.id 
+                this.props.newComment(this.state, userId)
+                    .then(()=>this.setState({text:"", clicked: false}))
+                    .catch(()=>this.setState({text:"", clicked: false}))
+              }  
+            }
+          
+          )
         }  
     }
     
-    onChange = e => this.setState(
-        {
-            newcomment: 
-            {
-                text: e.target.value,
-                imageId: this.props.match.params.imageId, 
-                author: 
-                    {
-                        id: this.props.currentUser.id, 
-                        username: this.props.currentUser.username
-                    }        
-            }
-        }
-    )
+    onChange = e => {
+      this.setState({text: e.target.value})}
     
     render(){
         return(
@@ -51,7 +50,7 @@ class CommentForm extends Component {
                 className="form-control" 
                 name="input-comment" 
                 onChange={this.onChange}
-                value={this.state.newcomment.text}
+                value={this.state.text}
                 rows="5"
               />
               <div className="d-flex justify-content-end align-items-center submit-button">

@@ -14,17 +14,24 @@ class ImagesList extends Component {
       limit: 20,
       skip: 0,
       end: false,
-      sort: undefined,
+      sort: "newest",
       loading: true
     }
   }
   
   
   componentDidMount(){
-    this.props.fetchImages(this.state.limit, this.state.skip)
-      .then(()=>{
-        this.setState({loading: false, skip: this.state.limit})
-      })
+    let sortBy = "newest"
+    if(document.cookie.includes("sort")){
+      // eslint-disable-next-line
+      sortBy = document.cookie.replace(/(?:(?:^|.*;\s*)sort\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    }
+    this.setState({sort: sortBy}, ()=>{ 
+      this.props.fetchImages(this.state.limit, this.state.skip, this.state.sort)
+        .then(()=>{
+          this.setState({loading: false, skip: this.state.limit})
+        })  
+    }) 
   }
   
   loadMoreImages = () => {
@@ -44,27 +51,34 @@ class ImagesList extends Component {
     let sortByRed = e.target.value
     this.setState({loading: true})
     this.props.fetchImages(this.state.limit, 0, sortByRed)
-      .then(()=> this.setState({skip: 0, sort: "red", loading: false, end:false}))
+      .then(()=> {
+          document.cookie = "sort=red"
+          this.setState({skip: 0, sort: "red", loading: false, end:false})})
   }
   
   sortImageByViews = e => {
     let sortByViews = e.target.value
     this.setState({loading: true})
     this.props.fetchImages(this.state.limit, 0, sortByViews)
-      .then(()=> this.setState({skip: 0, sort: "views", loading: false, end:false}))
+      .then(()=> {
+        document.cookie = "sort=views"
+        this.setState({skip: 0, sort: "views", loading: false, end:false})
+      })
   }
   
   sortImageByNewest = () => {
     this.setState({loading: true})
     this.props.fetchImages(this.state.limit, 0)
-      .then(() => 
+      .then(() =>{ 
+        document.cookie = "sort=newest"
         this.setState(
           this.setState({
             skip: 0, 
             loading: false, 
-            sort: null,
+            sort: "newest",
             end: false
-          })))
+          }))
+      })
   }
   
   render() {
@@ -76,20 +90,20 @@ class ImagesList extends Component {
               onClick={this.sortImageByViews}
               style={{borderBottom: `${this.state.sort==="views" ? "solid" : ""}`}}
               value="views">
-              VIEWEST
+              VIEWS
             </button>
             <button 
               className="btn btn-outline-danger"
               onClick={this.sortImageByRed}
               style={{borderBottom: `${this.state.sort==="red" ? "solid" : ""}`}}
               value="red">
-              REDEST
+              REDDEST
             </button>
             <button 
               className="btn btn-outline-dark" 
-              style={{borderBottom: `${this.state.sort ? "" : "solid"}`}}
+              style={{borderBottom: `${this.state.sort==="newest" ? "solid" : ""}`}}
               onClick={this.sortImageByNewest}>
-              NEWEST
+              NEW
             </button>
           </div>
           {Array.isArray(this.props.images) && this.props.images.length !== 0 && this.state.loading === false ? (
