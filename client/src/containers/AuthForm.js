@@ -18,7 +18,6 @@ class AuthForm extends Component {
       const authType = this.props.signup ? "signup" : "signin";
       this.props.onAuth(authType, this.state)
         .then(()=>{
-          this.setState({clicked: false})
           this.props.history.push("/")})
         .catch(()=>{
           this.setState({clicked: false})

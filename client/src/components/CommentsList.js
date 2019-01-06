@@ -45,7 +45,7 @@ class CommentsList extends Component{
       {this.props.comments.map(comment => (
         <div key={comment._id} className="comment">
           <div className="d-flex justify-content-between my-2">
-            <p style={{borderBottom: "solid 0.5px"}}className="author">@{comment.author.username} 
+            <p style={{borderBottom: "solid 0.5px"}}className="author">{comment.author.username} 
             <span className="date">
                {` | `} <Moment fromNow>{comment.createdAt}</Moment>
             </span>
@@ -55,7 +55,7 @@ class CommentsList extends Component{
             )}
           </div>
           
-          <p className="text text-justify" dangerouslySetInnerHTML={{ __html: comment.text }}/>
+          <p className="text-justify" dangerouslySetInnerHTML={{ __html: comment.text }}/>
         </div>
       ))}
       </div>

@@ -11,7 +11,7 @@ import {Loading, Spinner} from "../components/Loading"
 class ImagePage extends Component{
   constructor(props){
     super(props)
-    this.state={clickedRed: false, clickedDelete: false}
+    this.state={clickedRed: false, clickedDelete: false, showMore: false}
   }
   
   componentDidMount(){
@@ -20,6 +20,8 @@ class ImagePage extends Component{
       .then(res => {
         if(res===false){
           this.props.history.push("/")
+        } else if(this.props.image.text.length < 500){
+          this.setState({showMore: true})
         }
       })
   }
@@ -31,11 +33,8 @@ class ImagePage extends Component{
       let image_id = e.target.value
       let user_id = this.props.currentUser.id
       this.props.deleteImage(image_id, user_id)
-        .then(()=>{
-          this.setState({clickedRed: false});
-          this.props.history.push("/")
-        })
-        .catch(()=>this.setState({clickedRed: false}))
+        .then(()=>this.props.history.push("/"))
+        .catch(()=>this.setState({clickedDelete:false}))
     }
   }
   
@@ -44,10 +43,14 @@ class ImagePage extends Component{
       this.setState({clickedRed: true})
       let imageId = this.props.match.params.imageId
       let user_id = this.props.currentUser.id
-      this.props.marked(imageId, user_id)
-        .then(()=>this.setState({clickedRed: false}))
-        .catch(()=>this.setState({clickedRed: false}))
+      this.props.marked(imageId, user_id, ()=>this.setState({clickedRed: false}))
+      
+        // .catch(()=>this.setState({clickedRed: false}))
     }
+  }
+  
+  showMore = () => {
+    this.setState({showMore: !this.state.showMore})
   }
   
   render(){
@@ -68,10 +71,15 @@ class ImagePage extends Component{
                   <span style={{fontSize: "13px", color:"#e8233b"}}>Red</span>
                 </div>
               </div>
-              
               <h5 className="card-title">{image.title}</h5>
-              <p className="text-muted" style={{marginTop: "-10px", fontSize: "13px"}}>by {image.author.username} | <span><Moment fromNow>{image.updateAt || image.createdAt}</Moment></span> | <span>{image.views || 0} views</span></p>
-              <p className="description card-text text-justify">{image.text}</p>
+              <p className="text text-muted" style={{marginTop: "-10px", fontSize: "13px"}}>by {image.author.username} | <span><Moment fromNow>{image.createdAt}</Moment></span> | {image.updatedAt && <span>edited | </span>}<span>{image.views || 0} views</span></p>
+              <p style={{maxHeight: this.state.showMore ? "none" : "100px"}} className="description card-text text-justify" dangerouslySetInnerHTML={{ __html: image.text}}/>
+              {image.text.length > 500 && 
+                <div className="text-muted pt-2"
+                  style={{fontSize: "12px", cursor:"pointer"}}
+                  onClick={this.showMore}>SHOW {this.state.showMore === false ? "MORE" : "LESS"}
+                </div>
+              }
             </div>
             <div className="authaction d-flex justify-content-between">
               {image.author && image.author._id === currentUser.id && (
@@ -112,7 +120,6 @@ class ImagePage extends Component{
               {currentUser.id ? (<CommentForm {...this.props}/>) : (<h5 className="text-center">Login to add comment</h5>)}
               <CommentsList {...this.props}/>
             </div>
-            
           </div>
         </div>
       </div>

@@ -2,8 +2,9 @@ import React, {Component} from "react"
 import {Redirect} from "react-router-dom"
 import {connect} from "react-redux"
 import { newImage, fetchImage } from "../store/actions/images"
-import { Form, TextArea, Text } from 'informed';
+import { Form, Text } from 'informed';
 import {Spinner} from "../components/Loading"
+import TextEditor from "../components/TextEditor"
 
 class ImageForm extends Component{
   constructor(props){
@@ -32,30 +33,37 @@ class ImageForm extends Component{
     }
   }
   
-  
-  handleChange = e => this.setState({[e.target.name]: e.target.value, author: this.props.currentUser.user.id})
+  handleChange = e => this.setState({[e.target.name]: e.target.value})
   
   handleStoryForm = () => {
-    if(this.state.clicked === false){
-      this.setState({clicked: true})
-      if(this.formApi.getState().invalid === false){
-        let image_id = this.props.match.params.imageId 
-        let formType = this.props.edit ? "edit" : ""
-        let user_id = this.props.currentUser.user.id
-        this.props.newImage(this.state, user_id, image_id,  formType)
-          .then(()=>{
-            this.setState({text: "", title: "", image: "", author: "", clicked: false});
-            this.props.edit ? this.props.history.goBack() : this.props.history.push("/")
-          })
-          .catch(()=>{
-            this.setState({text: "", title: "", image: "", author: "", clicked: false});
-          })
-      }  
+    if(this.state.clicked === false && this.formApi.getState().invalid === false){
+      this.setState({
+        text: this.state.text.toString("html"),
+        clicked: true,  
+        author: this.props.currentUser.user.id,
+      }, 
+        ()=>{
+          let image_id = this.props.match.params.imageId 
+          let formType = this.props.edit ? "edit" : ""
+          let user_id = this.props.currentUser.user.id
+          this.props.newImage(this.state, user_id, image_id,  formType)
+            .then(()=>{
+              this.setState({clicked: false});
+              this.props.edit ? this.props.history.goBack() : this.props.history.push("/")
+            })
+            .catch(()=>{
+              this.setState({clicked: false});
+            })
+        })  
     }
   }
   
   setFormApi(formApi) {
     this.formApi = formApi;
+  }
+  
+  stateUp = (value) => {
+      this.setState({text: value})
   }
   
   render(){
@@ -104,16 +112,9 @@ class ImageForm extends Component{
         /><br/>
         <p className="float-right" style={{fontSize:"0.8rem", color:"red"}}>{formState.errors.text}</p>
         <label htmlFor="text">Text</label>
-        <TextArea
-          field="text"
-          className="form-control"
-          rows="10"
-          name="text"
-          value={this.state.text}
-          onChange={this.handleChange}
-          validate={basicValidation}
-          validateOnBlur
-        />
+        <TextEditor 
+          edit={this.props.edit}
+          size="imageform" text={this.state.text} clicked={this.state.clicked} stateUp={this.stateUp.bind(this)}/>
         <button type="submit" onClick={this.handleStoryForm} className="btn mt-2 btn-dark">Submit</button>
         </div>
         )}

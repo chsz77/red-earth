@@ -1,3 +1,14 @@
+.commentform {
+  min-height: 200px;
+  font-family: inherit, serif!important;
+}
+
+.imageform{
+  min-height: 300px;
+  font-family: inherit!important;
+  font-size: inherit!important
+}
+
 .btn-outline-danger:hover{
   background-color:#e8233b;
 }
@@ -60,6 +71,7 @@
 .homepage{
   height: 100vh;
   background: #e8233b;
+  overflow: hidden;
 }
 
 .marked{
@@ -118,8 +130,6 @@
 
 
 .newcommentform{
-    border: solid 0.5px #e5e5e5;
-    border-radius: 5px;
     margin: 20px;
     
 }
@@ -170,10 +180,6 @@
   font-size: 14px;
 }
 
-.allcomments .comment .text {
-  font-size: 20px
-}
-
 .authform {
   border: solid 0.5px #e5e5e5;
   padding: 20px 20px 80px 20px;
@@ -198,7 +204,8 @@
   margin-bottom: 40px;
 }
 
-.imagepage .card-text{
+.imagepage .description{
+  overflow: hidden;
   min-height: 100px
 }
 

@@ -14,7 +14,7 @@ router.route("/:image_id")
   .get(getImage)
 
 router.route("/:image_id/:user_id")
-  .post(votes)
+  .post(loginRequired, votes)
   .delete(loginRequired, ensureCorrectUser, deleteImage);
 
 router.route("/:image_id/edit/:user_id")

@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import {connect} from "react-redux"
 import { newComment } from "../store/actions/comments"
 import {Spinner} from "./Loading"
+import TextEditor from "./TextEditor"
 
 class CommentForm extends Component {
     constructor(props){
@@ -14,8 +15,9 @@ class CommentForm extends Component {
     
     handleNewComment = e => {
         e.preventDefault()
-        if(this.state.clicked === false){
+        if(this.state.clicked === false && this.state.text){
           this.setState({
+            text: this.state.text.toString("html"),
             clicked: true, 
             imageId: this.props.match.params.imageId, 
             author:{
@@ -24,20 +26,23 @@ class CommentForm extends Component {
             }
           }, 
             () => {
-              if(this.state.text && this.state.text.length > 0){
+              if(this.state.text.replace(/&nbsp;|<(.|\n)*?>/g, '').length>0){
                 let userId = this.props.currentUser.id 
                 this.props.newComment(this.state, userId)
                     .then(()=>this.setState({text:"", clicked: false}))
-                    .catch(()=>this.setState({text:"", clicked: false}))
-              }  
+                    .catch(()=>this.setState({clicked: false}))
+              } else {
+                this.setState({clicked: false})
+              } 
             }
           
           )
         }  
     }
     
-    onChange = e => {
-      this.setState({text: e.target.value})}
+    stateUp = (value) => {
+      this.setState({text: value})
+    }
     
     render(){
         return(
@@ -46,13 +51,7 @@ class CommentForm extends Component {
               <label htmlFor="input-comment" >
                 Add Comment
               </label>
-              <textarea
-                className="form-control" 
-                name="input-comment" 
-                onChange={this.onChange}
-                value={this.state.text}
-                rows="5"
-              />
+              <TextEditor size="commentform" stateUp={this.stateUp.bind(this)} clicked={this.state.clicked} text={this.state.text}/>
               <div className="d-flex justify-content-end align-items-center submit-button">
                 {this.state.clicked===true && (
                 <Spinner />
