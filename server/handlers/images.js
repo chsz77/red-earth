@@ -84,11 +84,13 @@ exports.votes = async function (req, res, next){
     let foundStory = await db.Image.findById(req.params.image_id)
     if(!foundStory.level.includes(req.params.user_id)){
       await foundStory.level.push(req.params.user_id)
+      await foundStory.views--
       await foundStory.red++
       await foundStory.save()
       return res.status(200).json(true)
     } else {
       await foundStory.level.pull(req.params.user_id)
+      await foundStory.views--
       await foundStory.red--
       await foundStory.save()
       return res.status(200).json(false)

@@ -40,10 +40,10 @@ class ImagePage extends Component{
   
   handleMark = () =>{
     if(this.state.clickedRed === false){
-      this.setState({clickedRed: true})
-      let imageId = this.props.match.params.imageId
+      this.setState({clickedRed: true});
+      let image_id = this.props.match.params.imageId
       let user_id = this.props.currentUser.id
-      this.props.marked(imageId, user_id, ()=>this.setState({clickedRed: false}))
+      this.props.marked(image_id, user_id, ()=>this.setState({clickedRed: false}))
       
         // .catch(()=>this.setState({clickedRed: false}))
     }
