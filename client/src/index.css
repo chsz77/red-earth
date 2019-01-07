@@ -29,10 +29,6 @@
   padding: 1vw;
 }
 
-.hero .sortbutton {
-  overflow-x: hidden
-}
-
 .hero .sortbutton button{
   text-align: right;
   border-top: none;
@@ -42,6 +38,10 @@
   cursor: pointer;
   padding: 10px 50px;
   margin-bottom: 2vw;
+}
+
+.hero .sortbutton .newest{
+  text-align: left;
 }
 
 .hero .image-description{

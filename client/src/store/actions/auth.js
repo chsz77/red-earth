@@ -29,7 +29,6 @@ export function authUser(type, userData) {
       return apiCall("post", `${API}/api/auth/${type}`, userData)
         .then(({ token, ...user }) => {
           localStorage.setItem("jwtToken", token);
-          localStorage.setItem("expired", Math.floor(Date.now() / 60000));
           dispatch(setCurrentUser(user));
           setAuthorizationToken(token);
           dispatch(removeError());
