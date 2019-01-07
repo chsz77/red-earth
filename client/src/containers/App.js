@@ -9,15 +9,16 @@ import jwtDecode from "jwt-decode"
 
 const store = configureStore()
 
-if(localStorage.jwtToken) {
+if(localStorage.jwtToken && Math.floor(Date.now() / 60000) - localStorage.expired < 60 ) {
   setAuthorizationToken(localStorage.jwtToken);
+  localStorage.setItem("expired", Math.floor(Date.now() / 60000));
   try {
     store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
   } catch(err) {
     store.dispatch(setCurrentUser({}));
   }
   
-}
+} else {localStorage.clear()}
 
 const App = () => (
   <Provider store={store}>
