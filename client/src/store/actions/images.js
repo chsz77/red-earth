@@ -22,14 +22,12 @@ export const deleteId = id => ({
     id
 })
 
-export const markedRed = user_id => ({
+export const markedRed = () => ({
     type: MARKED_RED,
-    user_id
 })
 
-export const unMarkedRed = user_id => ({
+export const unMarkedRed = () => ({
     type: UNMARKED_RED,
-    user_id
 })
 
 export const deleteImage = (image_id, user_id) => {
@@ -89,10 +87,10 @@ export const marked = (image_id, user_id) => {
         return apiCall("post", `${API}/api/images/${image_id}/${user_id}`)
             .then(res => {
                 if(res===true){
-                    dispatch(markedRed(user_id))
+                    dispatch(markedRed())
                     console.log(res)
                 } else {
-                    dispatch(unMarkedRed(user_id))
+                    dispatch(unMarkedRed())
                 }
             })
             .catch(err => {dispatch(addError(err.image))})
