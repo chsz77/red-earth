@@ -12,8 +12,6 @@ const images = (state = [], action) => {
             return {...state, red: state.red+1}
         case UNMARKED_RED:
             return {...state, red: state.red-1}
-        case DELETE_IMAGE:
-            return state.filter(image => image._id !== action.id)
         default:
             return state
     }

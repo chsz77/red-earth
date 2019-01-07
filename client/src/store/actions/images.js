@@ -17,11 +17,6 @@ export const getImage = image => ({
     image
 })
 
-export const deleteId = id => ({
-    type: DELETE_IMAGE,
-    id
-})
-
 export const markedRed = () => ({
     type: MARKED_RED,
 })
@@ -88,7 +83,6 @@ export const marked = (image_id, user_id) => {
             .then(res => {
                 if(res===true){
                     dispatch(markedRed())
-                    console.log(res)
                 } else {
                     dispatch(unMarkedRed())
                 }
