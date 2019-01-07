@@ -9,9 +9,9 @@ const images = (state = [], action) => {
         case LOAD_IMAGE:
             return action.image
         case MARKED_RED:
-            return state.push(action.markedRed)
+            return {...state, level: state.level.concat(action.user_id), red: state.red+1}
         case UNMARKED_RED:
-            return state.level.pull(action.unMarkedRed)
+            return {...state, level: state.level.filter(level => level !== action.user_id), red: state.red-1}
         case DELETE_IMAGE:
             return state.filter(image => image._id !== action.id)
         default:

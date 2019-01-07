@@ -6,7 +6,7 @@ export function configureStore(){
     const store = createStore(
         rootReducer,
         compose(
-            applyMiddleware(thunk),   
+            applyMiddleware(thunk),  
         )
     );
     return store

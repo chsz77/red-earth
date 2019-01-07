@@ -90,6 +90,7 @@ export const marked = (image_id, user_id) => {
             .then(res => {
                 if(res===true){
                     dispatch(markedRed(user_id))
+                    console.log(res)
                 } else {
                     dispatch(unMarkedRed(user_id))
                 }
