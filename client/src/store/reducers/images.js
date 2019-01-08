@@ -1,4 +1,4 @@
-import { LOAD_IMAGES, DELETE_IMAGE, LOAD_IMAGE, LOAD_MORE_IMAGES, MARKED_RED, UNMARKED_RED } from "../actionTypes";
+import { LOAD_IMAGES,LOAD_MORE_IMAGES } from "../actionTypes";
 
 const images = (state = [], action) => {
     switch (action.type) {
@@ -6,12 +6,6 @@ const images = (state = [], action) => {
             return action.images;
         case LOAD_MORE_IMAGES:
             return [...state, ...action.moreImages]
-        case LOAD_IMAGE:
-            return action.image
-        case MARKED_RED:
-            return {...state, red: state.red+1}
-        case UNMARKED_RED:
-            return {...state, red: state.red-1}
         default:
             return state
     }

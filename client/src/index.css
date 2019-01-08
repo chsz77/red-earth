@@ -1,3 +1,7 @@
+body{
+  overflow-x: hidden
+}
+
 .commentform {
   min-height: 200px;
   font-family: inherit, serif!important;

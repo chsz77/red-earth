@@ -11,7 +11,7 @@ import {Loading, Spinner} from "../components/Loading"
 class ImagePage extends Component{
   constructor(props){
     super(props)
-    this.state={clickedRed: false, clickedDelete: false, showMore: false}
+    this.state={clickedRed: false, clickedDelete: false, showMore: false, loading: true}
   }
   
   componentDidMount(){
@@ -24,6 +24,7 @@ class ImagePage extends Component{
           this.setState({showMore: true})
         }
       })
+      .then(()=>this.setState({loading:false}))
   }
   
   handleDelete = e =>{
@@ -45,18 +46,16 @@ class ImagePage extends Component{
       let user_id = this.props.currentUser.id
       this.props.marked(image_id, user_id)
         .then(()=>this.setState({clickedRed: false}))
-      
-        // .catch(()=>this.setState({clickedRed: false}))
     }
   }
   
-  showMore = () => {
+  handleShowMore = () => {
     this.setState({showMore: !this.state.showMore})
   }
   
   render(){
     const {image, currentUser} = this.props
-    if(!image.author){
+    if(this.state.loading || !image.author){
       return <Loading/>
     }
     return(
@@ -78,7 +77,7 @@ class ImagePage extends Component{
               {image.text.length > 500 && 
                 <div className="text-muted pt-2"
                   style={{fontSize: "12px", cursor:"pointer"}}
-                  onClick={this.showMore}>SHOW {this.state.showMore === false ? "MORE" : "LESS"}
+                  onClick={this.handleShowMore}>SHOW {this.state.showMore === false ? "MORE" : "LESS"}
                 </div>
               }
             </div>
@@ -130,7 +129,7 @@ class ImagePage extends Component{
 
 function mapStateToProps(state){
     return {
-        image: state.images,
+        image: state.image,
         currentUser: state.currentUser.user
     }
 }

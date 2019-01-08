@@ -1,6 +1,6 @@
 import { apiCall } from "../../services/api"
 import { addError } from "./errors"
-import { LOAD_IMAGES, LOAD_IMAGE, DELETE_IMAGE, LOAD_MORE_IMAGES, API, MARKED_RED, UNMARKED_RED } from "../actionTypes";
+import { LOAD_IMAGES, LOAD_IMAGE, LOAD_MORE_IMAGES, API, MARKED_RED, UNMARKED_RED } from "../actionTypes";
 
 export const getImages = images => ({
     type: LOAD_IMAGES,
