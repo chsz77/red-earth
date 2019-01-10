@@ -9,6 +9,8 @@ const imageSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    lat:Number,
+    lng:Number,
     image:{
       type: String,
     },
@@ -18,7 +20,8 @@ const imageSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: "User"
         },
-    views: {type: Number, default: 0}
+    views: {type: Number, default: 0},
+    location:{type: String},
   },
   {
     timestamps:true

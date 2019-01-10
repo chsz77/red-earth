@@ -10,10 +10,20 @@ const commentSchema = new mongoose.Schema({
       required: true,
     },
   author: {
-          id: {type: mongoose.Schema.Types.ObjectId,
-          ref: "User"},
+          id: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
           username: String
         },
+  reply: {
+      type: Boolean,
+      default: false
+  },
+  parentId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment"
+  },
+  helpful:[String],
+  nothelpful: [String],
+  points: {type: Number, default: 0}
   },
   {
     timestamps: true
