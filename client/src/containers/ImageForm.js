@@ -5,6 +5,7 @@ import { newImage, fetchImage } from "../store/actions/images"
 import { Form, Text } from 'informed';
 import {Spinner} from "../components/Loading"
 import TextEditor from "../components/TextEditor"
+import LocationInput from "../components/LocationInput"
 
 class ImageForm extends Component{
   constructor(props){
@@ -62,8 +63,12 @@ class ImageForm extends Component{
     this.formApi = formApi;
   }
   
+  locationState=(location, lat, lng) =>{
+    this.setState({location, lat, lng})
+  }
+  
   stateUp = (value) => {
-      this.setState({text: value})
+      this.setState({text:value})
   }
   
   render(){
@@ -110,6 +115,9 @@ class ImageForm extends Component{
           validate={basicValidation}
           validateOnBlur
         /><br/>
+        <label >Location</label>
+        <LocationInput locationState={this.locationState.bind(this)}/>
+        <br/>
         <p className="float-right" style={{fontSize:"0.8rem", color:"red"}}>{formState.errors.text}</p>
         <label htmlFor="text">Text</label>
         <TextEditor 
@@ -126,7 +134,7 @@ class ImageForm extends Component{
 
 function mapStateToProps(state){
         return {
-            image: state.images,
+            image: state.image,
             errors: state.errors,
             currentUser: state.currentUser
         }

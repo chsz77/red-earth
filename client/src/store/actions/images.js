@@ -1,6 +1,7 @@
 import { apiCall } from "../../services/api"
 import { addError } from "./errors"
 import { LOAD_IMAGES, LOAD_IMAGE, LOAD_MORE_IMAGES, API, MARKED_RED, UNMARKED_RED } from "../actionTypes";
+import queryString from 'query-string'
 
 export const getImages = images => ({
     type: LOAD_IMAGES,
@@ -17,12 +18,14 @@ export const getImage = image => ({
     image
 })
 
-export const markedRed = () => ({
+export const markedRed = user_id => ({
     type: MARKED_RED,
+    user_id
 })
 
-export const unMarkedRed = () => ({
+export const unMarkedRed = user_id => ({
     type: UNMARKED_RED,
+    user_id
 })
 
 export const deleteImage = (image_id, user_id) => {
@@ -33,15 +36,14 @@ export const deleteImage = (image_id, user_id) => {
     }
 }
 
-export const fetchImages = (limit, skip, sort) => {
+export const fetchImages = (limit, skip, sort, location) => {
     return dispatch => {
-        let sortBy = ""
-        if(sort === "red"){
-            sortBy = `?sort=red`
-        } else if(sort === "views"){
-            sortBy = `?sort=views`
-        } 
-        return apiCall("get", `${API}/api/images/${limit}/${skip}${sortBy}`)
+        let query = {
+            sort: sort,
+            location: location
+        }
+        let apiQuery = "?" + queryString.stringify(query)
+        return apiCall("get", `${API}/api/images/${limit}/${skip}${apiQuery}`)
             .then(res => {
                 if(res.length === 0){
                     return false
@@ -82,9 +84,9 @@ export const marked = (image_id, user_id) => {
         return apiCall("post", `${API}/api/images/${image_id}/${user_id}`)
             .then(res => {
                 if(res===true){
-                    dispatch(markedRed())
+                    dispatch(markedRed(user_id))
                 } else {
-                    dispatch(unMarkedRed())
+                    dispatch(unMarkedRed(user_id))
                 }
             })
             .catch(err => {dispatch(addError(err.image))})

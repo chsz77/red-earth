@@ -8,10 +8,10 @@ export const DELETE_IMAGE = "DELETE_IMAGE";
 export const LOAD_COMMENTS = "LOAD_COMMENTS";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const ADD_COMMENT = "ADD_COMMENT";
-export const API = "https://redearth.herokuapp.com"
+// export const API = "http://webdev-chsz77.c9users.io:8080"
 export const MARKED_RED = "MARKED_RED"
 export const UNMARKED_RED = "UNMARKED_RED"
-
+export const API = "https://redearth.herokuapp.com"
 
 
 

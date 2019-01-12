@@ -1,11 +1,13 @@
 import React from "react"
-import Welcome from "../components/Welcome"
 import ImagesList from "../components/ImagesList"
+import Searchbar from "../components/Searchbar"
 
-const Mainpage = () => (
+ 
+
+const Mainpage = props => (
     <div>
-        <Welcome />
-        <ImagesList />
+        <Searchbar {...props}/>
+        <ImagesList {...props}/>
     </div>
 )
 

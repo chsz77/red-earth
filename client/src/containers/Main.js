@@ -14,7 +14,7 @@ const Main = props => {
   return(
     <Switch>
       <Route exact path='/' render={() => (<Redirect to="/images"/>)}/>
-      <Route exact path='/images' render={props => <Mainpage/>}/>
+      <Route exact path='/images' render={props => <Mainpage {...props}/>}/>
       <Route exact path='/signin' component={props => <AuthForm onAuth={authUser} errors={errors} removeError={removeError} {...props} />}/>
       <Route exact path='/signup' component={props => <AuthForm signup onAuth={authUser} errors={errors} removeError={removeError} {...props}/>}/>
       <Route exact path='/images/new' component={props=> <ImageForm {...props}/>}/>

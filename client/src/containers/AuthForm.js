@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Text } from 'informed';
 import {Spinner} from "../components/Loading"
+import { connect } from "react-redux";
 
 class AuthForm extends Component {
   constructor(props){
@@ -10,6 +11,12 @@ class AuthForm extends Component {
       password: "",
       username: "",
       clicked: false
+    }
+  }
+  
+  componentDidMount(){
+    if(this.props.currentUser.isAuthenticated){
+      this.props.history.push("/")
     }
   }
   
@@ -127,4 +134,10 @@ class AuthForm extends Component {
   }
 }
 
-export default AuthForm
+function mapStateToProps(state){
+    return {
+        currentUser: state.currentUser
+    };
+}
+
+export default connect(mapStateToProps)(AuthForm);

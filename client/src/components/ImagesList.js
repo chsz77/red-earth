@@ -6,6 +6,7 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {Loading} from "../components/Loading"
 import Waypoint from 'react-waypoint';
 import Moment from "react-moment";
+import queryString from 'query-string'
  
 class ImagesList extends Component {
   constructor(props){
@@ -14,31 +15,30 @@ class ImagesList extends Component {
       limit: 20,
       skip: 0,
       end: false,
-      sort: "newest",
-      loading: true
+      loading: false
     }
   }
   
-  
   componentDidMount(){
-    let sortBy = "newest"
-    if(document.cookie.includes("sort")){
-      // eslint-disable-next-line
-      sortBy = document.cookie.replace(/(?:(?:^|.*;\s*)sort\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    let {sortBy, location} = queryString.parse(this.props.location.search)
+    this.props.fetchImages(this.state.limit, this.state.skip, sortBy, location)
+  }
+  
+  componentDidUpdate(prevProps){
+    let oldSort = queryString.parse(prevProps.location.search).sortBy
+    let oldLocation = queryString.parse(prevProps.location.search).location
+    let newLocation = queryString.parse(this.props.location.search).location
+    let newSort = queryString.parse(this.props.location.search).sortBy
+    if (newSort !== oldSort || newLocation !== oldLocation){
+      this.update()
     }
-    this.setState({sort: sortBy}, ()=>{ 
-      this.props.fetchImages(this.state.limit, this.state.skip, this.state.sort)
-        .then(()=>{
-          this.setState({loading: false, skip: this.state.limit})
-        })  
-    }) 
   }
   
   loadMoreImages = () => {
       let skip = this.state.skip+this.state.limit 
       let limit = this.state.limit
-      let sort = this.state.sort
-      this.props.fetchImages(limit, skip, sort)
+      let {sortBy, location} = queryString.parse(this.props.location.search)
+      this.props.fetchImages(limit, skip, sortBy, location)
         .then((res) => {
           if(res===false){
             this.setState({end:true})
@@ -47,79 +47,70 @@ class ImagesList extends Component {
         })
   }
   
-  sortImageByRed = e => {
-    let sortByRed = e.target.value
-    this.setState({loading: true})
-    this.props.fetchImages(this.state.limit, 0, sortByRed)
+  update = () => {
+    let {sortBy, location} = queryString.parse(this.props.location.search)
+    this.props.fetchImages(this.state.limit, 0, sortBy, location)
       .then(()=> {
-          document.cookie = "sort=red"
-          this.setState({skip: 0, sort: "red", loading: false, end:false})})
+          this.setState({skip: 0, loading: false, end:false})})
   }
   
-  sortImageByViews = e => {
-    let sortByViews = e.target.value
-    this.setState({loading: true})
-    this.props.fetchImages(this.state.limit, 0, sortByViews)
-      .then(()=> {
-        document.cookie = "sort=views"
-        this.setState({skip: 0, sort: "views", loading: false, end:false})
-      })
-  }
-  
-  sortImageByNewest = () => {
-    this.setState({loading: true})
-    this.props.fetchImages(this.state.limit, 0)
-      .then(() =>{ 
-        document.cookie = "sort=newest"
-        this.setState(
-          this.setState({
-            skip: 0, 
-            loading: false, 
-            sort: "newest",
-            end: false
-          }))
-      })
+  handleSortQuery = e => {
+    let query = queryString.parse(this.props.location.search)
+    query.sortBy = e.target.value
+    this.props.history.push("?" + queryString.stringify(query)) 
   }
   
   render() {
-    return (
-        <div className="hero">
-          <div className="sortbutton d-flex justify-content-center">
+    const sortBy = queryString.parse(this.props.location.search).sortBy
+    
+    const sortButton = <div className="sortbutton d-flex justify-content-center align-items-center">
             <button 
               className="btn btn-outline-dark"
-              onClick={this.sortImageByViews}
-              style={{borderBottom: `${this.state.sort==="views" ? "solid" : ""}`}}
-              value="views">
+              value="views"
+              onClick={this.handleSortQuery}
+              style={{borderBottom: `${sortBy==="views" ? "solid" : ""}`}}>
               VIEWS
             </button>
-            <button 
+            <button
               className="btn btn-outline-danger"
-              onClick={this.sortImageByRed}
-              style={{borderBottom: `${this.state.sort==="red" ? "solid" : ""}`}}
-              value="red">
+              value="red"
+              onClick={this.handleSortQuery}
+              style={{borderBottom: `${sortBy==="red" ? "solid" : ""}`}}>
               REDDEST
             </button>
-            <button 
+            <button
               className="btn btn-outline-dark" 
-              style={{borderBottom: `${this.state.sort==="newest" ? "solid" : ""}`}}
-              onClick={this.sortImageByNewest}>
+              style={{borderBottom: `${!sortBy || sortBy==="newest" ? "solid" : ""}`}}
+              value="newest"
+              onClick={this.handleSortQuery}>
               NEW
             </button>
           </div>
-          {Array.isArray(this.props.images) && this.props.images.length !== 0 && this.state.loading === false ? (
+    
+    return (
+        <div className="hero">
+          {sortButton}
+          {Array.isArray(this.props.images) && this.props.images.length !== 0 ? (
           <div>
           <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}>
             <Masonry>
                 {this.props.images.map((image, i) => (
-                  <div key={i} className="card imageslist" style={{border: "none"}}>
+                  <div key={image._id} className="card imageslist" style={{border: "none"}}>
                     <Link to={`/images/${image._id}`} style={{minHeight: "150px"}}>
                       <img alt={image.title} src={image.image}/>
                     </Link>
                     <div className="image-description d-flex justify-content-between">
                       <div>
                         <div>{image.title.split(" ").length > 2 && image.title.length > 25 ? (image.title.slice(0, 20) + '...') : image.title}</div> 
-                        <p style={{fontSize: "13px"}}>
-                          <Moment format="LL">{image.createdAt}</Moment> | <Moment fromNow>{image.createdAt}</Moment> 
+                        <p
+                          style={{
+                            fontSize: "13px", 
+                            fontWeight: "bold", 
+                            marginBottom: 0}}>
+                          {image.location.split(" ").length > 2 && image.location.length > 25 ? (image.location.slice(0, 20) + '...') : image.location}
+                        </p>
+                        <p style={{fontSize: "12px"}}>
+                          <Moment format="LL">{image.createdAt}</Moment> | <Moment fromNow>{image.createdAt}</Moment>
                         </p>
                       </div>
                       <div className="d-flex flex-column">
@@ -132,7 +123,7 @@ class ImagesList extends Component {
             </Masonry>
           </ResponsiveMasonry>
           
-          {this.state.end===false ? 
+          { this.state.end===false  ? 
             (<div><Waypoint onEnter={this.loadMoreImages}/><Loading/></div>) : 
             (<p className="text-center text-muted mt-3">End of the World</p>)
           }

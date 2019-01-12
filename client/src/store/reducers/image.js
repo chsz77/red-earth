@@ -5,9 +5,9 @@ const image = (state = {}, action) => {
         case LOAD_IMAGE:
             return action.image
         case MARKED_RED:
-            return {...state, red: state.red+1}
+            return {...state, level:[...state.level, action.user_id], red: state.red+1}
         case UNMARKED_RED:
-            return {...state, red: state.red-1}
+            return {...state, red: state.red-1, level:state.level.filter(level => !action.user_id)}
         default:
             return state
     }

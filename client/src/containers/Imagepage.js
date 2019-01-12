@@ -6,12 +6,13 @@ import { Link } from "react-router-dom";
 import CommentForm from "../components/CommentForm"
 import CommentsList from "../components/CommentsList"
 import {Loading, Spinner} from "../components/Loading"
+import GoogleMaps from "../components/GoogleMaps"
 
 //Image page
 class ImagePage extends Component{
   constructor(props){
     super(props)
-    this.state={clickedRed: false, clickedDelete: false, showMore: false, loading: true}
+    this.state={clickedRed: false, clickedDelete: false, showMore: false, loading: true, tab: "image"}
   }
   
   componentDidMount(){
@@ -53,17 +54,34 @@ class ImagePage extends Component{
     this.setState({showMore: !this.state.showMore})
   }
   
+  switchTab = e => {
+    this.setState({tab: e.target.innerHTML.toLowerCase()})
+  }
+  
   render(){
     const {image, currentUser} = this.props
-    if(this.state.loading || !image.author){
+    if(this.state.loading){
       return <Loading/>
     }
     return(
-      <div className="row imagepage">
-        <div className="col-md-8 offset-md-2 image-page">
+      <div className="imagepage">
+        <div className="col-md-8 mx-auto image-page">
+          {image.lat && (
+          <div className="switch-tab">
+            <button style={this.state.tab==="image" ? {color: "#e8233b", borderBottomColor: "#e8233b"} : {}} onClick={this.switchTab}>
+              Image
+            </button>
+            <button style={this.state.tab==="location" ? {color: "#e8233b", borderBottomColor: "#e8233b"} : {}} onClick={this.switchTab}>
+              Location
+            </button>
+          </div>
+          )}
           <div>
             <div className="card">   
-            <img src={image.image} className="h-100 w-100 card-img-top" alt={image.title}/>
+            <img src={image.image} className={`${this.state.tab==="image" ? "d-block" : "d-none"} h-100 w-100 card-img-top`} alt={image.title}/>
+            {image.lat && (
+            <GoogleMaps lng={image.lng} lat={image.lat} display={this.state.tab}/>
+            )}
             <div className="card-body">
               <div className="float-right">
                 <div className="d-flex flex-row" style={{marginTop: "-15px"}}>
@@ -72,8 +90,9 @@ class ImagePage extends Component{
                 </div>
               </div>
               <h5 className="card-title">{image.title}</h5>
-              <p className="text text-muted" style={{marginTop: "-10px", fontSize: "13px"}}>by {image.author.username} | <span><Moment fromNow>{image.createdAt}</Moment></span> | {image.updatedAt && <span>edited | </span>}<span>{image.views || 0} views</span></p>
-              <p style={{maxHeight: this.state.showMore ? "none" : "100px"}} className="description card-text text-justify" dangerouslySetInnerHTML={{ __html: image.text}}/>
+              <p style={{fontSize: "14px"}}className="text-muted">{image.location}</p>
+              <p className="text text-muted" style={{marginTop: "-10px", fontSize: "13px"}}>by {image.author ? image.author.username : ""} | <span><Moment fromNow>{image.createdAt}</Moment></span> | <span>{image.views || 0} views</span></p>
+              <p className={`${this.state.showMore ? "showMore" : ""} description card-text text-justify`} dangerouslySetInnerHTML={{ __html: image.text}}/>
               {image.text.length > 500 && 
                 <div className="text-muted pt-2"
                   style={{fontSize: "12px", cursor:"pointer"}}
@@ -114,10 +133,10 @@ class ImagePage extends Component{
                 )}
               </div>
           </div>
-            <div className="allcomments">
+            <div className="allcomments col-md-11 mx-auto">
               <h4>Comments</h4>
               <hr/>
-              {currentUser.id ? (<CommentForm {...this.props}/>) : (<h5 className="text-center">Login to add comment</h5>)}
+              {currentUser.id ? (<CommentForm {...this.props}/>) : (<h5 className="text-center py-4">Login to add comment</h5>)}
               <CommentsList {...this.props}/>
             </div>
           </div>

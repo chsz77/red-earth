@@ -2,6 +2,29 @@ body{
   overflow-x: hidden
 }
 
+.image-page {
+  padding:0!important;
+}
+
+.switch-tab{
+  text-align: center;
+    margin-bottom: 10px;
+}
+
+.switch-tab button{
+  border: none;
+  background: none;
+  border-bottom: solid 0.5px black;
+  cursor: pointer;
+  padding: 10px 30px;
+  margin: 5px
+}
+
+.switch-tab button:hover{
+  color: #e8233b;
+  border-color: #e8233b;
+}
+
 .commentform {
   min-height: 200px;
   font-family: inherit, serif!important;
@@ -14,7 +37,8 @@ body{
 }
 
 .btn-outline-danger:hover{
-  background-color:#e8233b;
+  background-color:#e8233b!important;
+  color: white!important;
 }
 .btn-outline-danger{
   color: #e8233b;
@@ -52,10 +76,15 @@ body{
   background: rgba(0,0,0,0.7);
   color: white;
   border-radius: 0 0 5px 5px;
-  margin-top:-110px;
+  margin-top:-125px;
   padding: 25px;
   opacity: 0;
   transition: opacity 0.3s linear;
+}
+
+.hero .imageslist {
+  opacity: 0;
+  animation: 1s slidefade 0.3s forwards;
 }
 
 .hero .imageslist:hover .image-description{
@@ -72,12 +101,6 @@ body{
   width: 100%;
 }
 
-.homepage{
-  height: 100vh;
-  background: #e8233b;
-  overflow: hidden;
-}
-
 .marked{
   border-color: #e8233b;
   color: #e8233b;
@@ -88,9 +111,51 @@ body{
   border-color: #e8233b;
 }
 
-.homepage .main-section {
-  padding: 10vw 10px;
+.homepage{
+  padding: 10px;
+  min-height: 100vh;
+  width: 100%;
+  background: #e8233b;
+  overflow: hidden;
+  transition: min-height 0.3s ease-out;
+  transition: background 0.3s ease-out;
 }
+
+.homepage .main-section input:focus{
+  background-color: #343a40;
+  color: white;
+}
+
+.suggestion{
+  opacity: 0;
+  animation: 0.3s slidefade 0.3s forwards;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #343a40;
+  border-top: solid 0.5px ;
+  transition: color 0.2s ease-out;
+  transition: font-weight 0.2s linear;
+  margin: 5px;
+  margin-bottom: 1.5rem
+}
+
+.suggestion:hover{
+  color: black;
+  font-weight: 600
+}
+
+@keyframes slidefade {
+    100% {
+        opacity: 1;
+    }
+}
+
+.homepage .main-section {
+  margin-top: 12vw;
+  transition: margin-top 0.3s linear
+}
+
 .homepage .main-section .row{
   margin-top: 2rem;
 }
@@ -113,25 +178,18 @@ body{
   border-right: solid 0.5px;
 }
 
-.homepage .dummy{
-  height:15vh;
+.homepage-2 {
+  min-height: 0;
+  background: none;
 }
 
-.homepage .welcome span {
-  font-weight: lighter;
+.homepage-2 .text{
+  display: none
 }
 
-.homepage .main-section .auth{
-  margin-top: 30px!important;
-  margin-left: 7px
+.homepage-2 .main-section{
+  margin-top: 3vw!important
 }
-
-.homepage .main-section .auth .btn{
-  padding: 15px 40px;
-  font-weight: 500;
-  font-size: 20px
-}
-
 
 .newcommentform{
     margin: 20px;
@@ -151,37 +209,82 @@ body{
 }
 
 .newcommentform textarea{
-  border: none;
   width: 99.8%;
   margin-left: 1px
 }
 
-.allcomments .comment{ 
-  min-height: 80px;
+.allcomments .comment {
+  margin: 0 20px 0 20px;
   padding: 5px;
-  margin: 40px 10px;
-  border-bottom: solid 0.5px #e5e5e5
-  
+  border-bottom: solid 0.5px #e5e5e5;
+  overflow: auto;
+}
+.allcomments h4{
+  padding-left: 1rem;
 }
 
-.allcomments .comment button{
+.allcomments .delete{
   margin-left: 5px;
-  color: white;
-  background: #343a40;
-  padding: 0 10px 3px;
+  color: black;
+  background: none;
+  padding: 5px 11px;
   border: none;
   cursor: pointer;
   border-radius: 100%
            
 }
 
-.allcomments .comment .author {
+.allcomments .author {
+  font-size: 1rem;
   font-weight: bold;
-  margin: 0;
+  margin: 0px;
+  padding-bottom: 2px
 }
 
-.allcomments .comment .date {
+.allcomments .comment-description {
+  margin-top: 10px;
+  min-height: 5vw;
+}
+
+.allcomments .reply {
+  background: none;
+  cursor: pointer;
+  border: none;
+  margin-left:20px;
+  padding-left: 10px;
+  border-left: solid 0.5px #e8233b;
+  font-size: 13px;
+  color: #e8233b;
+  margin-right: 10px;
+}
+
+.allcomments .reply:hover {
+  border-left: solid 0.5px black;
+  color: black;
+}
+
+.allcomments .date {
   font-size: 14px;
+  font-weight: lighter
+}
+
+.allcomments .reply-input {
+  opacity: 0;
+  margin-left: 70px;
+  animation: 0.2s slidefade 0.2s forwards;
+  margin-right: 20px;
+  border-bottom: solid 0.5px #e5e5e5;
+  margin-top: 10px;
+}
+
+.allcomments .replies {
+  margin: 10px 20px 0 70px;
+  animation: 0.3s slidefade 0.3s forwards;
+  padding-left: 10px;
+  border-left: solid 0.5px;
+  min-height: 50px;
+  overflow: auto;
+  border-bottom: solid 0.5px #e5e5e5;
 }
 
 .authform {
@@ -210,7 +313,12 @@ body{
 
 .imagepage .description{
   overflow: hidden;
-  min-height: 100px
+  height: 100px;
+  transition: height 0.3s linear;
+}
+
+.imagepage .showMore{
+  height: auto;
 }
 
 .authaction {
