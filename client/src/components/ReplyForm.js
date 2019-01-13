@@ -15,7 +15,6 @@ class ReplyForm extends Component {
       this.setState({replyClicked: !this.state.replyClicked})
     }
   
-    
     handleReply = e => {
         e.preventDefault()
         if(this.state.submitClicked === false && this.state.text){
@@ -55,7 +54,7 @@ class ReplyForm extends Component {
                 <div className="d-flex align-items-center">
                     <button 
                         className="btn btn-sm" 
-                        style={{borderRadius: 0, borderLeft: "solid 0.5px black", color: "black" }} 
+                        style={{color: "black", borderRadius: 0, marginTop:"3px" }} 
                         type="submit">
                         Submit
                     </button>

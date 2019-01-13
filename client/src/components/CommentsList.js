@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import { connect } from "react-redux";
 import CommentItem from "../components/CommentItem"
-import { fetchComments, deleteComment } from "../store/actions/comments";
+import { fetchComments, deleteComment, votes, hates } from "../store/actions/comments";
 import RepliesList from "../components/RepliesList"
 import ReplyForm from "../components/ReplyForm"
 
@@ -28,9 +28,15 @@ class CommentsList extends Component{
             date = {comment.createdAt} 
             username = {comment.author.username} 
             text = {comment.text}
+            points = {comment.points}
             isCorrectUser = {this.props.currentUser.id === comment.author.id}
             deleteComment = {this.props.deleteComment.bind(this, comment._id, this.props.currentUser.id)} 
             css = "comment"
+            helpful = {comment.helpful}
+            nothelpful = {comment.nothelpful}
+            user_id = {this.props.currentUser.id}
+            votes= {this.props.votes.bind(this, comment._id, this.props.currentUser.id)}
+            hates= {this.props.hates.bind(this, comment._id, this.props.currentUser.id)}
             />
           {this.props.currentUser.id && (
             <ReplyForm newReply={this.newReply} commentId={comment._id}/>
@@ -53,4 +59,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { fetchComments, deleteComment })(CommentsList)
+export default connect(mapStateToProps, { fetchComments, deleteComment, votes, hates })(CommentsList)

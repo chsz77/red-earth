@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { fetchImages } from "../store/actions/images";
 import {Link} from "react-router-dom"
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import {Loading} from "../components/Loading"
+import {Loading, Spinner} from "../components/Loading"
 import Waypoint from 'react-waypoint';
 import Moment from "react-moment";
 import queryString from 'query-string'
@@ -15,7 +15,8 @@ class ImagesList extends Component {
       limit: 20,
       skip: 0,
       end: false,
-      loading: false
+      loading: false,
+      spinner: false
     }
   }
   
@@ -35,23 +36,26 @@ class ImagesList extends Component {
   }
   
   loadMoreImages = () => {
-      let skip = this.state.skip+this.state.limit 
-      let limit = this.state.limit
-      let {sortBy, location} = queryString.parse(this.props.location.search)
-      this.props.fetchImages(limit, skip, sortBy, location)
-        .then((res) => {
-          if(res===false){
-            this.setState({end:true})
-          }
-          this.setState({skip})
-        })
+      if(this.state.loading===false){
+        let skip = this.state.skip+this.state.limit 
+        let limit = this.state.limit
+        let {sortBy, location} = queryString.parse(this.props.location.search)
+        this.props.fetchImages(limit, skip, sortBy, location)
+          .then((res) => {
+            if(res===false){
+              this.setState({end:true})
+            }
+            this.setState({skip})
+          })
+      }  
   }
   
   update = () => {
+    this.setState({spinner: true})
     let {sortBy, location} = queryString.parse(this.props.location.search)
     this.props.fetchImages(this.state.limit, 0, sortBy, location)
       .then(()=> {
-          this.setState({skip: 0, loading: false, end:false})})
+          this.setState({skip: 0, loading: false, end:false, spinner: false})})
   }
   
   handleSortQuery = e => {
@@ -64,6 +68,7 @@ class ImagesList extends Component {
     const sortBy = queryString.parse(this.props.location.search).sortBy
     
     const sortButton = <div className="sortbutton d-flex justify-content-center align-items-center">
+            {this.state.spinner && <Spinner />}
             <button 
               className="btn btn-outline-dark"
               value="views"

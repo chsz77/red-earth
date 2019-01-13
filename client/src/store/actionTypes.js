@@ -11,6 +11,11 @@ export const ADD_COMMENT = "ADD_COMMENT";
 // export const API = "http://webdev-chsz77.c9users.io:8080"
 export const MARKED_RED = "MARKED_RED"
 export const UNMARKED_RED = "UNMARKED_RED"
+export const ADD_VOTE = "ADD_VOTE"
+export const REMOVE_VOTE = "REMOVE_VOTE"
+export const ADD_HATE = "ADD_HATE"
+export const REMOVE_HATE = "REMOVE_HATE"
+
 export const API = "https://redearth.herokuapp.com"
 
 
