@@ -46,8 +46,10 @@ class CommentItem extends Component {
                     </p>
                     <div className="d-flex">
                         {this.state.loading && <Spinner/>}
-                        {css==="comment" && user_id && (
+                        {css==="comment" && (
                         <div className="comment-vote">
+                            {user_id && (
+                            <span>
                             <button 
                                 onClick={this.agree} 
                                 className={`${nothelpful.includes(user_id) ? "disabled" : ""} ${helpful.includes(user_id) ? "voted" : ""} btn btn-sm btn-outline-dark`}>
@@ -58,6 +60,8 @@ class CommentItem extends Component {
                                 className={`${helpful.includes(user_id) ? "disabled" : ""} ${nothelpful.includes(user_id) ? "voted" : ""} btn btn-sm btn-outline-dark`}>
                                 Hate
                             </button>
+                            </span>
+                            )}
                             <button className="points btn btn-sm">
                              <span className="point-text">{points > 0 ? "Helpful" : points === 0 ? "No Vote" : "Hated" }</span><span className="point-count">{points} points</span>
                             </button>

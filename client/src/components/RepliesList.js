@@ -3,13 +3,14 @@ import CommentItem from "../components/CommentItem"
 import { deleteComment } from "../store/actions/comments";
 import axios from "axios";
 import { connect } from "react-redux";
+import {API} from "../store/actionTypes";
 
 
 class Replies extends Component{
   state = {replies: []}
   
   componentDidMount(){
-      axios.get(`http://webdev-chsz77.c9users.io:8080/api/comments/replies/${this.props.parentId}`)
+      axios.get(`${API}/api/comments/replies/${this.props.parentId}`)
         .then(res => {
           let replies = res.data
           this.setState({replies})
