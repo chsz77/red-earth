@@ -7,15 +7,12 @@ const errorHandler = require("./handlers/error")
 const authRoutes =  require("./routes/auth");
 const imagesRoutes =  require("./routes/images");
 const commentsRoutes =  require("./routes/comments");
+const dashboardRoutes =  require("./routes/dashboard");
 const path = require('path');
 const db = require("./models")
 
 //intial config
 const PORT = process.env.PORT;
-
-
-
-
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,6 +20,7 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes); 
 app.use("/api/images", imagesRoutes); 
 app.use("/api/comments", commentsRoutes); 
+app.use("/api/dashboard", dashboardRoutes); 
 
 // const faker = require("faker")
     

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Comment = require("./comment")
 
 const imageSchema = new mongoose.Schema({
     title:{
@@ -27,6 +28,15 @@ const imageSchema = new mongoose.Schema({
     timestamps:true
   }
 )
+
+imageSchema.pre("remove", async function(next){
+    try{
+        await Comment.deleteMany({imageId: this.id});
+    } catch (err){
+        return next(err);
+    }
+})
+
 const Image = mongoose.model("Image", imageSchema);
 
 module.exports = Image
