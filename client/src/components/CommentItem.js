@@ -17,19 +17,19 @@ class CommentItem extends Component {
     }
     
     agree = () => {
-        if(!this.props.nothelpful.includes(this.props.user_id)){
+        // if(!this.props.nothelpful.includes(this.props.user_id)){
             this.setState({loading: true})
             this.props.votes()
                 .then(() => this.setState({loading: false}))
-        }    
+        // }    
     }
     
     hate = () => {
-        if(!this.props.helpful.includes(this.props.user_id)){
+        // if(!this.props.helpful.includes(this.props.user_id)){
         this.setState({loading: true})
         this.props.hates()
             .then(() => this.setState({loading: false}))
-        }    
+        // }    
     }
     
     render(){
@@ -40,11 +40,14 @@ class CommentItem extends Component {
                 <div className="d-flex justify-content-between">
                     <p style={{borderBottom: "solid 0.5px"}}className="author">{username}
                           {` | `}
-                        <span className="date">
+                        <span className="date text-muted">
                          <Moment fromNow>{date}</Moment> 
                         </span>
                     </p>
                     <div className="d-flex">
+                        {isCorrectUser && ( 
+                        <button className="btn btn-sm btn-outline-dark delete" onClick={this.clickedDelete}>&times;</button>
+                        )}
                         {this.state.loading && <Spinner/>}
                         {css==="comment" && (
                         <div className="comment-vote">
@@ -52,23 +55,18 @@ class CommentItem extends Component {
                             <span>
                             <button 
                                 onClick={this.agree} 
-                                className={`${nothelpful.includes(user_id) ? "disabled" : ""} ${helpful.includes(user_id) ? "voted" : ""} btn btn-sm btn-outline-dark`}>
+                                className={`${helpful.includes(user_id) ? "voted" : ""} btn btn-sm btn-outline-dark`}>
                                 Agree
                             </button>
                             <button 
                                 onClick={this.hate} 
-                                className={`${helpful.includes(user_id) ? "disabled" : ""} ${nothelpful.includes(user_id) ? "voted" : ""} btn btn-sm btn-outline-dark`}>
+                                className={`${nothelpful.includes(user_id) ? "voted" : ""} btn btn-sm btn-outline-dark`}>
                                 Hate
                             </button>
                             </span>
                             )}
-                            <button className="points btn btn-sm">
-                             <span className="point-text">{points > 0 ? "Helpful" : points === 0 ? "No Vote" : "Hated" }</span><span className="point-count">{points} points</span>
-                            </button>
+                            <span className="point-text">{points > 0 ? ("+"+points) : points }</span>
                         </div>)}
-                    {isCorrectUser && ( 
-                        <button className="btn btn-outline-danger delete" onClick={this.clickedDelete}>&times;</button>
-                    )}
                     </div>
                 </div>
                 <p className="text-justify comment-description" dangerouslySetInnerHTML={{ __html: text }}/>

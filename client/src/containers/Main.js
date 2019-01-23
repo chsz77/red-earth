@@ -5,6 +5,7 @@ import Mainpage from "../containers/Mainpage";
 import AuthForm from "../containers/AuthForm";
 import ImageForm from "../containers/ImageForm";
 import Imagepage from "../containers/Imagepage"
+import Dashboard from "../containers/Dashboard"
 import { authUser } from "../store/actions/auth"
 import { removeError } from "../store/actions/errors"
 
@@ -14,6 +15,7 @@ const Main = props => {
   return(
     <Switch>
       <Route exact path='/' render={() => (<Redirect to="/images"/>)}/>
+      <Route exact path='/dashboard' component={Dashboard}/>
       <Route exact path='/images' render={props => <Mainpage {...props}/>}/>
       <Route exact path='/signin' component={props => <AuthForm onAuth={authUser} errors={errors} removeError={removeError} {...props} />}/>
       <Route exact path='/signup' component={props => <AuthForm signup onAuth={authUser} errors={errors} removeError={removeError} {...props}/>}/>

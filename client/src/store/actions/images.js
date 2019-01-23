@@ -31,7 +31,7 @@ export const unMarkedRed = user_id => ({
 export const deleteImage = (image_id, user_id) => {
     return dispatch => {
         return apiCall("delete", `${API}/api/images/${image_id}/${user_id}`)
-            .then(() => true)
+            .then(() => image_id)
             .catch(err => {dispatch(addError(err.image))})
     }
 }

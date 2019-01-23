@@ -78,6 +78,10 @@ export const votes = (comment_id, user_id) => {
                     dispatch(addVote(comment_id, user_id))}
                 else if(res===false){
                     dispatch(removeVote(comment_id, user_id))}
+                else if(res==="failed"){
+                    dispatch(hates(comment_id, user_id))
+                        .then(()=>dispatch(votes(comment_id, user_id)))
+                }    
             })
             .catch(err => dispatch(addError(err.comment)))
     }
@@ -92,10 +96,10 @@ export const hates = (comment_id, user_id) => {
                     dispatch(addHate(comment_id, user_id))}
                 else if(res===false){
                     dispatch(removeHate(comment_id, user_id))}
-                // else if(res==="failed"){
-                //     console.log("triggered")
-                //     dispatch(votes(comment_id, user_id))
-                // }
+                else if(res==="failed"){
+                    dispatch(votes(comment_id, user_id))
+                        .then(()=>dispatch(hates(comment_id, user_id)))
+                }
             })
             .catch(err => dispatch(addError(err.comment)))
     }

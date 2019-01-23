@@ -230,21 +230,22 @@ body{
 }
 
 .allcomments .delete{
-  margin-left: 5px;
   color: black;
   background: none;
-  padding: 5px 11px;
+  margin-top: 2px;
   border: none;
   cursor: pointer;
-  border-radius: 100%
-           
+  border-radius: 0         
+}
+
+.allcomments .delete:focus{
+  box-shadow: none!important
 }
 
 .allcomments .author {
   font-size: 1rem;
   font-weight: bold;
-  margin: 0px;
-  padding-bottom: 2px
+  margin: 0px
 }
 
 .allcomments .comment-description {
@@ -295,12 +296,12 @@ body{
 .allcomments .comment-vote button{
   border-radius: 0;
   border: none;
-  margin-top: 5px;
 }
 
 .allcomments .comment-vote .voted {
   color: #343a40;
-  border-bottom: solid 0.5px #343a40;
+  font-weight: bold;
+  border-bottom: solid 2px #343a40;
 }
 
 .allcomments .comment-vote .voted:hover{
@@ -308,8 +309,8 @@ body{
 }
 
 .allcomments .points {
-  color: white;
-  background: #e8233b;
+  color: black;
+  background: none;
   cursor: default!important;
   margin-left: 5px
 }
@@ -318,13 +319,21 @@ body{
   box-shadow: none !important;
 }
 
-.allcomments .points:hover .point-count{
-  display: block;
+.allcomments .point-text {
+  font-weight: bold;
+  margin-left: 5px;
+  padding-bottom: 3px;
+  border-bottom: solid 2px black;
 }
 
-.allcomments .points:hover .point-text{
-  display: none
-}
+/*.allcomments .points:hover .point-count{*/
+/*  display: block;*/
+/*  color: #e8233b*/
+/*}*/
+
+/*.allcomments .points:hover .point-text{*/
+/*  display: none*/
+/*}*/
 
 .allcomments .points .point-count {
   display: none;
@@ -383,4 +392,23 @@ body{
   display: flex;
   justify-content: center
   
+}
+
+.dashboard .lds-dual-ring {
+  position: absolute;
+  right: 7vw;
+  margin-top: 30px;
+}
+
+.dashboard button{
+  background: none;
+  border: none;
+}
+
+.dashboard button:hover {
+  color: #e8233b;
+}
+
+.dashboard a{
+  color: black;
 }
