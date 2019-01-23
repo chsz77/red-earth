@@ -1,1 +1,3 @@
 node_modules
+src/components/GoogleMaps.js
+public/index.html
